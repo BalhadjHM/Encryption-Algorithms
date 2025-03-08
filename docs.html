@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Encryption Documentation</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			/* Base styles */
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: "Poppins", -apple-system, BlinkMacSystemFont,
+					"Segoe UI", Roboto, sans-serif;
+				background-color: #09090b;
+				min-height: 100vh;
+				padding-top: 4rem;
+				color: #fafafa;
+				line-height: 1.5;
+			}
+
+			/* Navbar styles */
+			.navbar {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				background-color: #18181b;
+				border-bottom: 1px solid #27272a;
+				z-index: 100;
+			}
+
+			.nav-container {
+				max-width: 1200px;
+				margin: 0 auto;
+				padding: 1rem 2rem;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+			}
+
+			.nav-title {
+				font-size: 1.25rem;
+				font-weight: 600;
+				color: #fafafa;
+			}
+			.nav-links {
+				display: flex;
+				gap: 1.5rem;
+			}
+			.nav-link {
+				color: #a1a1aa;
+				text-decoration: none;
+				font-size: 0.875rem;
+				font-weight: 500;
+				transition: color 0.2s;
+			}
+			.nav-link:hover,
+			.nav-link.active {
+				color: #fafafa;
+			}
+
+			/* Documentation styles */
+			.docs-container {
+				max-width: 800px;
+				margin: 2rem auto;
+				padding: 0 1rem;
+			}
+
+			.algorithm-section {
+				background-color: #18181b;
+				border-radius: 0.75rem;
+				border: 1px solid #27272a;
+				padding: 2rem;
+				margin-bottom: 2rem;
+			}
+
+			h1 {
+				font-size: 2.5rem;
+				margin-bottom: 2rem;
+			}
+			h2 {
+				font-size: 1.875rem;
+				margin: 0 0 1rem;
+			}
+			h3 {
+				font-size: 1.25rem;
+				margin: 1.5rem 0 0.75rem;
+				color: #e4e4e7;
+			}
+			p {
+				margin-bottom: 1rem;
+				color: #a1a1aa;
+			}
+			ul {
+				margin: 1rem 0 1rem 1.5rem;
+				color: #a1a1aa;
+			}
+			li {
+				margin-bottom: 0.5rem;
+			}
+		</style>
+	</head>
+	<body>
+		<nav class="navbar">
+			<div class="nav-container">
+				<div class="nav-title">Encryption Algorithms</div>
+				<div class="nav-links">
+					<a href="Caesar_Cipher.html" class="nav-link">Caesar</a>
+					<a href="Playfair Cipher.html" class="nav-link">Playfair</a>
+					<a href="Vigenère_Cipher.html" class="nav-link">Vigenère</a>
+					<a href="RSA_Encryption.html" class="nav-link">RSA</a>
+					<a href="docs.html" class="nav-link active">Docs</a>
+				</div>
+			</div>
+		</nav>
+
+		<div class="docs-container">
+			<h1>Encryption Algorithms Documentation</h1>
+
+			<div class="algorithm-section">
+				<h2>Caesar Cipher</h2>
+				<p>
+					A simple substitution cipher that shifts each letter in the
+					plaintext by a fixed number of positions in the alphabet.
+				</p>
+				<h3>How It Works</h3>
+				<p>
+					Using a numerical key (shift value), each letter is replaced
+					by a letter some fixed number of positions down the
+					alphabet.
+				</p>
+				<h3>Use Cases</h3>
+				<ul>
+					<li>Basic text encryption for learning purposes</li>
+					<li>Teaching fundamentals of cryptography</li>
+				</ul>
+			</div>
+
+			<div class="algorithm-section">
+				<h2>Playfair Cipher</h2>
+				<p>
+					A digraph substitution cipher that encrypts pairs of letters
+					instead of single letters.
+				</p>
+				<h3>How It Works</h3>
+				<p>
+					Uses a 5x5 grid of letters constructed using a keyword.
+					Letters are encrypted in pairs according to their positions
+					in the grid.
+				</p>
+				<h3>Use Cases</h3>
+				<ul>
+					<li>Historical cryptography studies</li>
+					<li>More secure alternative to simple substitution</li>
+				</ul>
+			</div>
+
+			<div class="algorithm-section">
+				<h2>Vigenère Cipher</h2>
+				<p>
+					A polyalphabetic substitution cipher using a keyword to
+					create multiple shift patterns.
+				</p>
+				<h3>How It Works</h3>
+				<p>
+					Uses a keyword to determine shift values for each letter in
+					the plaintext, creating multiple Caesar ciphers used in
+					sequence.
+				</p>
+				<h3>Use Cases</h3>
+				<ul>
+					<li>More complex encryption for learning</li>
+					<li>Understanding polyalphabetic substitution</li>
+				</ul>
+			</div>
+
+			<div class="algorithm-section">
+				<h2>RSA Encryption</h2>
+				<p>
+					A public-key cryptosystem that uses paired keys for
+					encryption and decryption.
+				</p>
+				<h3>How It Works</h3>
+				<p>
+					Uses two different keys: a public key for encryption and a
+					private key for decryption. Based on the mathematical
+					properties of large prime numbers.
+				</p>
+				<h3>Use Cases</h3>
+				<ul>
+					<li>Secure data transmission</li>
+					<li>Digital signatures</li>
+				</ul>
+			</div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Playfair Cipher</title>
+		<!-- Add Google Fonts import -->
+		<link
+			href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: "Poppins", -apple-system, BlinkMacSystemFont,
+					"Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+				background-color: #09090b;
+				min-height: 100vh;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				color: #fafafa;
+				line-height: 1.5;
+			}
+
+			.container {
+				background-color: #18181b;
+				padding: 2rem;
+				border-radius: 0.75rem;
+				box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+				width: 90%;
+				max-width: 500px;
+				border: 1px solid #27272a;
+			}
+
+			h1 {
+				font-size: 1.875rem;
+				font-weight: 600;
+				margin-bottom: 1.5rem;
+				color: #fafafa;
+			}
+
+			.input-group {
+				margin-bottom: 1rem;
+			}
+
+			label {
+				display: block;
+				font-size: 0.875rem;
+				font-weight: 500;
+				margin-bottom: 0.5rem;
+				color: #a1a1aa;
+			}
+
+			input {
+				width: 100%;
+				padding: 0.5rem;
+				font-size: 0.875rem;
+				background-color: #27272a;
+				border: 1px solid #3f3f46;
+				color: #fafafa;
+				border-radius: 0.375rem;
+				outline: none;
+				transition: border-color 0.2s, box-shadow 0.2s;
+			}
+
+			input:focus {
+				border-color: #2563eb;
+				box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+			}
+
+			.button-group {
+				display: flex;
+				gap: 0.5rem;
+				margin: 1.5rem 0;
+			}
+
+			button {
+				padding: 0.5rem 1rem;
+				font-size: 0.875rem;
+				font-weight: 500;
+				border-radius: 0.375rem;
+				cursor: pointer;
+				transition: all 0.2s;
+				border: 1px solid transparent;
+			}
+
+			button:first-child {
+				background-color: #2563eb;
+				color: #fafafa;
+			}
+
+			button:last-child {
+				background-color: #27272a;
+				color: #fafafa;
+				border-color: #3f3f46;
+			}
+
+			button:hover {
+				opacity: 0.9;
+			}
+
+			button:active {
+				transform: scale(0.98);
+			}
+
+			#result {
+				margin-top: 1rem;
+				padding: 1rem;
+				background-color: #27272a;
+				border-radius: 0.375rem;
+				font-size: 0.875rem;
+				color: #a1a1aa;
+				min-height: 3rem;
+
+				border: 1px solid #3f3f46;
+			}
+
+			            .navbar {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                background-color: #18181b;
+                border-bottom: 1px solid #27272a;
+                z-index: 100;
+            }
+
+            .nav-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 1rem 2rem;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .nav-title {
+                font-size: 1.25rem;
+                font-weight: 600;
+                color: #fafafa;
+            }
+
+            .nav-links {
+                display: flex;
+                gap: 1.5rem;
+            }
+
+            .nav-link {
+                color: #a1a1aa;
+                text-decoration: none;
+                font-size: 0.875rem;
+                font-weight: 500;
+                transition: color 0.2s;
+            }
+
+            .nav-link:hover {
+                color: #fafafa;
+            }
+
+            /* Update body padding to accommodate fixed navbar */
+            body {
+                padding-top: 4rem;
+            }
+
+            /* Active link style - add this class to the current page's link */
+            .nav-link.active {
+                color: #fafafa;
+            }
+		</style>
+	</head>
+	<body>
+		<nav class="navbar">
+			<div class="nav-container">
+				<div class="nav-title">Encryption Algorithms</div>
+				<div class="nav-links">
+					<a href="Caesar_Cipher.html" class="nav-link">Caesar</a>
+					<a href="Playfair Cipher.html" class="nav-link">Playfair</a>
+					<a href="Vigenère_Cipher.html" class="nav-link">Vigenère</a>
+					<a href="RSA_Encryption.html" class="nav-link">RSA</a>
+					<a href="docs.html" class="nav-link">Docs</a>
+				</div>
+			</div>
+		</nav>
+		<div class="container">
+			<h1>Playfair Cipher</h1>
+			<div class="input-group">
+				<label for="plaintext">Plaintext</label>
+				<input
+					type="text"
+					id="plaintext"
+					name="plaintext"
+					value="HELLO"
+				/>
+			</div>
+			<div class="input-group">
+				<label for="key">Key</label>
+				<input type="text" id="key" name="key" value="" />
+			</div>
+			<div class="button-group">
+				<button onclick="encrypt()">Encrypt</button>
+				<button onclick="decrypt()">Decrypt</button>
+			</div>
+			<div id="result"></div>
+		</div>
+		<script>
+			function createPlayfairMatrix(key) {
+				key = key.replace(/ /g, "").toUpperCase();
+				key = key.replace(/J/g, "I");
+				key = Array.from(new Set(key)).join(""); 
+				const alphabet = "ABCDEFGHIKLMNOPQRSTUVWXYZ";
+				let matrix = [];
+
+				// Fill the matrix with the key
+				for (let char of key) {
+					if (!matrix.includes(char) && alphabet.includes(char)) {
+						matrix.push(char);
+					}
+				}
+
+				// Fill the rest of the matrix with the remaining letters
+				for (let char of alphabet) {
+					if (!matrix.includes(char)) {
+						matrix.push(char);
+					}
+				}
+
+				// Convert the list into a 5x5 matrix
+				let playfairMatrix = [];
+				for (let i = 0; i < 25; i += 5) {
+					playfairMatrix.push(matrix.slice(i, i + 5));
+				}
+				return playfairMatrix;
+			}
+
+			function findPosition(matrix, char) {
+				for (let i = 0; i < matrix.length; i++) {
+					let row = matrix[i];
+					let j = row.indexOf(char);
+					if (j !== -1) {
+						return [i, j];
+					}
+				}
+				return [-1, -1];
+			}
+
+			function playfairCipher(text, key, mode = "encrypt") {
+				let playfairMatrix = createPlayfairMatrix(key);
+				text = text.replace(/ /g, "").toUpperCase();
+				text = text.replace(/J/g, "I");
+
+				if (mode === "encrypt") {
+					// Insert 'X' between identical letters in the same pair
+					let newText = "";
+					for (let i = 0; i < text.length; i += 2) {
+						newText += text[i];
+						if (i + 1 < text.length) {
+							if (text[i] === text[i + 1]) {
+								newText += "X";
+							}
+							newText += text[i + 1];
+						}
+					}
+					text = newText;
+
+					// Add an 'X' if the length is odd
+					if (text.length % 2 !== 0) {
+						text += "X";
+					}
+				}
+
+				let result = "";
+				for (let i = 0; i < text.length; i += 2) {
+					let a = text[i],
+						b = text[i + 1];
+					let [rowA, colA] = findPosition(playfairMatrix, a);
+					let [rowB, colB] = findPosition(playfairMatrix, b);
+
+					if (rowA === rowB) {
+						result +=
+							playfairMatrix[rowA][
+								(colA + (mode === "encrypt" ? 1 : -1) + 5) % 5
+							];
+						result +=
+							playfairMatrix[rowB][
+								(colB + (mode === "encrypt" ? 1 : -1) + 5) % 5
+							];
+					} else if (colA === colB) {
+						result +=
+							playfairMatrix[
+								(rowA + (mode === "encrypt" ? 1 : -1) + 5) % 5
+							][colA];
+						result +=
+							playfairMatrix[
+								(rowB + (mode === "encrypt" ? 1 : -1) + 5) % 5
+							][colB];
+					} else {
+						result += playfairMatrix[rowA][colB];
+						result += playfairMatrix[rowB][colA];
+					}
+				}
+				return result;
+			}
+
+			function encrypt() {
+				let plaintext = document.getElementById("plaintext").value;
+				let key = document.getElementById("key").value;
+				let ciphertext = playfairCipher(plaintext, key, "encrypt");
+				document.getElementById("result").innerText = ciphertext;
+			}
+
+			function decrypt() {
+				let resultText = document.getElementById("result").innerText;
+				let ciphertext = resultText.replace("Encrypted: ", "");
+				if (!ciphertext) {
+					document.getElementById("result").innerText =
+						"No text to decrypt";
+					return;
+				}
+				let key = document.getElementById("key").value;
+				let decryptedText = playfairCipher(ciphertext, key, "decrypt");
+
+				// First remove padding X at the end if present
+				decryptedText = decryptedText.replace(/X$/, "");
+
+				// Then remove X between identical letters
+				decryptedText = decryptedText.replace(/([A-Z])X\1/g, "$1$1");
+
+				document.getElementById("result").innerText = decryptedText;
+			}
+		</script>
+	</body>
+</html>
